@@ -1,4 +1,4 @@
-package com.example.smtmobile;
+package com.example.mobiledrawing;
 
 import org.junit.Test;
 

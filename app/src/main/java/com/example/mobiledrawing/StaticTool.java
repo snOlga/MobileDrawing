@@ -1,4 +1,4 @@
-package com.example.smtmobile;
+package com.example.mobiledrawing;
 
 import android.graphics.Paint;
 

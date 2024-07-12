@@ -5,11 +5,11 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context="mobiledrawing.MainActivity">
 
     <view
         android:id="@+id/drawView"
-        class="com.example.smtmobile.DrawView"
+        class="com.example.mobiledrawing.DrawView"
         android:layout_width="764dp"
         android:layout_height="535dp"
         android:background="#FFFFFF"
@@ -35,7 +35,7 @@
 
     <view
         android:id="@+id/gradient"
-        class="com.example.smtmobile.ColorPicker"
+        class="com.example.mobiledrawing.ColorPicker"
         android:layout_width="153dp"
         android:layout_height="134dp"
         app:layout_constraintBottom_toBottomOf="parent"

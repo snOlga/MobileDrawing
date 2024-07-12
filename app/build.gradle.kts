@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.smtmobile"
+    namespace = "com.example.mobiledrawing"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.smtmobile"
+        applicationId = "com.example.mobiledrawing"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

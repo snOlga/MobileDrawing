@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "SmtMobile"
+rootProject.name = "MobileDrawing"
 include(":app")
