@@ -1,8 +1,13 @@
 package com.example.mobiledrawing;
 
+import android.app.ActionBar;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.SeekBar;
 
 import androidx.activity.EdgeToEdge;
@@ -10,6 +15,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import android.view.ViewGroup.LayoutParams;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         colorSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                float color = ((float) progress/100*400);
+                float color = ((float) progress / 100 * 400);
                 colorPicker.setHue(color);
             }
 
@@ -48,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         brushSizeSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                StaticTool.brushSize = progress*10;
+                StaticTool.brushSize = progress * 10;
             }
 
             @Override
@@ -61,9 +73,37 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        int width = 1000;
+        int height = 1000;
+        LayoutParams params = new LayoutParams(width, height);
+        this.findViewById(R.id.drawView).setLayoutParams(params);
     }
 
     public void revertStroke(View v) {
         ((DrawView) this.findViewById(R.id.drawView)).revertStroke();
+    }
+
+    public void saveDrawing(View view) {
+        DrawView workZone = (DrawView) this.findViewById(R.id.drawView);
+        ArrayList<Stroke> strokes = workZone.getStrokes();
+        Bitmap bitmap = Bitmap.createBitmap(workZone.getMeasuredWidth(), workZone.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        for (Stroke stroke: strokes) {
+            canvas.drawPath(stroke.path, stroke.brush);
+        }
+
+        File imageFile = new File(getApplicationContext().getFilesDir(), "image.png");
+
+        try {
+            imageFile.createNewFile();
+            FileOutputStream out = new FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

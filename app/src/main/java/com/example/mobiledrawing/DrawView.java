@@ -23,26 +23,10 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 public class DrawView extends View {
-    //private float mainStrokeWidth = StaticTool.brushSize;
-
-    //private Paint brush = StaticTool.brush;
     private Path path = new Path();
     private float strokeWidth = StaticTool.brushSize;
     private ArrayList<Stroke> strokes = new ArrayList<>();
     private float strokeBefore = StaticTool.brushSize;
-    //private int currentColor = Color.BLACK;
-
-    private class Stroke {
-        public boolean isNew;
-        public Path path;
-        public Paint brush;
-
-        public Stroke(boolean isNew, Path path, Paint brush) {
-            this.isNew = isNew;
-            this.path = path;
-            this.brush = brush;
-        }
-    }
 
     public DrawView(Context context) {
         this(context, null);
@@ -77,7 +61,7 @@ public class DrawView extends View {
             default:
                 return false;
         }
-        postInvalidate();
+        invalidate();
         strokeBefore = strokeWidth;
 
         return false;
@@ -85,10 +69,10 @@ public class DrawView extends View {
 
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
+        super.onDraw(canvas);
         for (Stroke stroke : strokes) {
             canvas.drawPath(stroke.path, stroke.brush);
         }
-        canvas.save();
     }
 
     private Stroke initStroke(float x, float y, boolean isNew) {
@@ -97,6 +81,7 @@ public class DrawView extends View {
         StaticTool.brush.setStrokeJoin(Paint.Join.ROUND);
         StaticTool.brush.setStyle(Paint.Style.STROKE);
         StaticTool.brush.setStrokeWidth(strokeWidth);
+        StaticTool.brush.setStrokeCap(Paint.Cap.ROUND);
 
         path = new Path();
 
@@ -116,5 +101,9 @@ public class DrawView extends View {
         strokes.remove(journalSize - 1);
 
         invalidate();
+    }
+
+    public ArrayList<Stroke> getStrokes() {
+        return strokes;
     }
 }
