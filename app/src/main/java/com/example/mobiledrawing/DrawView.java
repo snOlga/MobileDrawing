@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.os.Build;
 import android.os.Environment;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -16,6 +17,7 @@ import android.util.Pair;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -75,13 +77,12 @@ public class DrawView extends View {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     private Stroke initStroke(float x, float y, boolean isNew) {
         StaticTool.brush = new Paint();
         StaticTool.brush.setColor(StaticTool.color);
-        StaticTool.brush.setStrokeJoin(Paint.Join.ROUND);
-        StaticTool.brush.setStyle(Paint.Style.STROKE);
         StaticTool.brush.setStrokeWidth(strokeWidth);
-        StaticTool.brush.setStrokeCap(Paint.Cap.ROUND);
+        StaticTool.initBrushStyle();
 
         path = new Path();
 

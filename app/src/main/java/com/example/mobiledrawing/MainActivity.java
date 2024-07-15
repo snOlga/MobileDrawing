@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.SeekBar;
@@ -15,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 import android.view.ViewGroup.LayoutParams;
 
 import java.io.File;
@@ -74,10 +77,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        int width = 1000;
-        int height = 1000;
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
         LayoutParams params = new LayoutParams(width, height);
         this.findViewById(R.id.drawView).setLayoutParams(params);
+        this.findViewById(R.id.drawView).setForegroundGravity(Gravity.CENTER);
     }
 
     public void revertStroke(View v) {
@@ -90,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         Bitmap bitmap = Bitmap.createBitmap(workZone.getMeasuredWidth(), workZone.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
 
-        for (Stroke stroke: strokes) {
+        for (Stroke stroke : strokes) {
             canvas.drawPath(stroke.path, stroke.brush);
         }
 
@@ -105,5 +112,13 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setEraser(View v) {
+        StaticTool.setBrushID(0);
+    }
+
+    public void setBrush(View v) {
+        StaticTool.setBrushID(1);
     }
 }
