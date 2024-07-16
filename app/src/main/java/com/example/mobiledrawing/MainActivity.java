@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -37,8 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
     int workzoneWidth = 0;
     int workzoneHeight = 0;
-
-    final Object lock = new Object();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +151,8 @@ public class MainActivity extends AppCompatActivity {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
             out.flush();
             out.close();
+
+            MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "image", "coolimage");
         } catch (IOException e) {
             e.printStackTrace();
         }
