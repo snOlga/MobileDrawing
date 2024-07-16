@@ -1,6 +1,7 @@
 package com.example.mobiledrawing;
 
 import android.app.ActionBar;
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,7 +10,10 @@ import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SeekBar;
 
 import androidx.activity.EdgeToEdge;
@@ -27,6 +31,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    Dialog createCanvasDialog;
+    EditText xSize, ySize;
+    Button confirmCreateCanvas;
+
+    int workzoneWidth = 0;
+    int workzoneHeight = 0;
+
+    final Object lock = new Object();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,11 +92,42 @@ public class MainActivity extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-        int height = displayMetrics.heightPixels;
-        int width = displayMetrics.widthPixels;
-        LayoutParams params = new LayoutParams(width, height);
-        this.findViewById(R.id.drawView).setLayoutParams(params);
-        this.findViewById(R.id.drawView).setForegroundGravity(Gravity.CENTER);
+        workzoneWidth = displayMetrics.widthPixels;
+        workzoneHeight = displayMetrics.heightPixels;
+        LayoutParams params = new LayoutParams(workzoneWidth, workzoneHeight);
+        DrawView workzone = this.findViewById(R.id.drawView);
+        workzone.setLayoutParams(params);
+
+        createCanvasDialog = new Dialog(MainActivity.this);
+        createCanvasDialog.setContentView(R.layout.create_canvas_dialog);
+        createCanvasDialog.getWindow().setLayout(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        createCanvasDialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.create_canvas_bg));
+
+        xSize = createCanvasDialog.findViewById(R.id.xSize);
+        ySize = createCanvasDialog.findViewById(R.id.ySize);
+        confirmCreateCanvas = createCanvasDialog.findViewById(R.id.confirmCreateCanvas);
+
+        confirmCreateCanvas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    workzoneHeight = Integer.parseInt(xSize.getText().toString());
+                    workzoneWidth = Integer.parseInt(ySize.getText().toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    createCanvasDialog.dismiss();
+                }
+
+                if (workzoneHeight != 0 && workzoneWidth != 0) {
+                    LayoutParams params = new LayoutParams(workzoneWidth, workzoneHeight);
+                    workzone.setLayoutParams(params);
+                    workzone.clear();
+                    workzone.setX(((float) displayMetrics.widthPixels /2) - (float) workzoneWidth /2);
+                    workzone.setY(((float) displayMetrics.heightPixels /2) - (float) workzoneHeight /2);
+                }
+            }
+        });
     }
 
     public void revertStroke(View v) {
@@ -120,5 +163,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void setBrush(View v) {
         StaticTool.setBrushID(1);
+    }
+
+    public void createNewCanvas(View v) {
+        createCanvasDialog.show();
     }
 }

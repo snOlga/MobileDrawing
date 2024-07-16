@@ -12,9 +12,9 @@
         class="com.example.mobiledrawing.DrawView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#00FFFFFF"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="-237dp" />
+        android:background="#FFFFFF"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-56dp" />
 
     <Button
         android:id="@+id/returnStrokeButton"
@@ -23,9 +23,9 @@
         android:onClick="revertStroke"
         android:text="back"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/brushSize"
+        app:layout_constraintEnd_toEndOf="@+id/saveButton"
         app:layout_constraintHorizontal_bias="0.637"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/saveButton"
         app:layout_constraintTop_toBottomOf="@+id/saveButton"
         app:layout_constraintVertical_bias="0.032" />
 
@@ -97,10 +97,23 @@
         android:onClick="setBrush"
         android:text="brush"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/returnStrokeButton"
+        app:layout_constraintEnd_toEndOf="@+id/eraseButton"
         app:layout_constraintHorizontal_bias="0.721"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/eraseButton"
         app:layout_constraintTop_toBottomOf="@+id/eraseButton"
         app:layout_constraintVertical_bias="0.031" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="createNewCanvas"
+        android:text="new"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/brushButton"
+        app:layout_constraintHorizontal_bias="0.086"
+        app:layout_constraintStart_toStartOf="@+id/brushButton"
+        app:layout_constraintTop_toBottomOf="@+id/returnStrokeButton"
+        app:layout_constraintVertical_bias="0.04" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -43,6 +43,7 @@ public class DrawView extends View {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float x = event.getX();
@@ -106,5 +107,10 @@ public class DrawView extends View {
 
     public ArrayList<Stroke> getStrokes() {
         return strokes;
+    }
+
+    public void clear() {
+        strokes.clear();
+        invalidate();
     }
 }
