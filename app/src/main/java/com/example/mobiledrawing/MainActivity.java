@@ -136,11 +136,11 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
-    public void revertStroke(View v) {
+    public void revertStroke() {
         ((DrawView) this.findViewById(R.id.drawView)).revertStroke();
     }
 
-    public void saveDrawing(View view) {
+    public void saveDrawing() {
         DrawView workZone = (DrawView) this.findViewById(R.id.drawView);
         ArrayList<Stroke> strokes = workZone.getStrokes();
         Bitmap bitmap = Bitmap.createBitmap(workZone.getMeasuredWidth(), workZone.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
@@ -165,15 +165,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void setEraser(View v) {
+    public void setEraser() {
         StaticTool.setBrushID(0);
     }
 
-    public void setBrush(View v) {
+    public void setBrush() {
         StaticTool.setBrushID(1);
     }
 
-    public void createNewCanvas(View v) {
+    public void createNewCanvas() {
         createCanvasDialog.show();
     }
 
@@ -187,16 +187,22 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.brushButton) {
-            setBrush(null);
+            setBrush();
         } else if (id == R.id.eraserButton) {
-            setEraser(null);
+            setEraser();
         } else if (id == R.id.saveButton) {
-            saveDrawing(null);
+            saveDrawing();
         } else if (id == R.id.newDrawingButton) {
-            createNewCanvas(null);
+            createNewCanvas();
         } else if (id == R.id.revertStrokeButton) {
-            revertStroke(null);
+            revertStroke();
+        } else if (id == R.id.hideButton) {
+            getSupportActionBar().hide();
         }
         return true;
+    }
+
+    public void showToolbar(View view) {
+        getSupportActionBar().show();
     }
 }

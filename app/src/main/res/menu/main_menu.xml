@@ -26,4 +26,9 @@
         android:icon="@drawable/plus_vector"
         app:showAsAction="always"
         android:id="@+id/newDrawingButton"/>
+    <item
+        android:title="hide toolbar"
+        android:icon="@drawable/hide_vector"
+        app:showAsAction="always"
+        android:id="@+id/hideButton"/>
 </menu>

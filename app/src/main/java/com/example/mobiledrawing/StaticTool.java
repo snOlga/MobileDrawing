@@ -22,13 +22,13 @@ public class StaticTool {
     @RequiresApi(api = Build.VERSION_CODES.Q)
     public static void initBrushStyle() {
         switch (brushID) {
-            case 0:
+            case 0: //eraser
                 StaticTool.brush.setStrokeJoin(Paint.Join.ROUND);
                 StaticTool.brush.setStyle(Paint.Style.STROKE);
                 StaticTool.brush.setStrokeCap(Paint.Cap.ROUND);
                 StaticTool.brush.setBlendMode(BlendMode.CLEAR);
                 break;
-            case 1:
+            case 1: //brush
                 StaticTool.brush.setStrokeJoin(Paint.Join.ROUND);
                 StaticTool.brush.setStyle(Paint.Style.STROKE);
                 StaticTool.brush.setStrokeCap(Paint.Cap.ROUND);
