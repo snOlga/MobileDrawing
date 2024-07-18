@@ -10,6 +10,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -18,7 +20,9 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -122,11 +126,14 @@ public class MainActivity extends AppCompatActivity {
                     LayoutParams params = new LayoutParams(workzoneWidth, workzoneHeight);
                     workzone.setLayoutParams(params);
                     workzone.clear();
-                    workzone.setX(((float) displayMetrics.widthPixels /2) - (float) workzoneWidth /2);
-                    workzone.setY(((float) displayMetrics.heightPixels /2) - (float) workzoneHeight /2);
+                    workzone.setX(((float) displayMetrics.widthPixels / 2) - (float) workzoneWidth / 2);
+                    workzone.setY(((float) displayMetrics.heightPixels / 2) - (float) workzoneHeight / 2);
                 }
             }
         });
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     public void revertStroke(View v) {
@@ -168,5 +175,28 @@ public class MainActivity extends AppCompatActivity {
 
     public void createNewCanvas(View v) {
         createCanvasDialog.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.brushButton) {
+            setBrush(null);
+        } else if (id == R.id.eraserButton) {
+            setEraser(null);
+        } else if (id == R.id.saveButton) {
+            saveDrawing(null);
+        } else if (id == R.id.newDrawingButton) {
+            createNewCanvas(null);
+        } else if (id == R.id.revertStrokeButton) {
+            revertStroke(null);
+        }
+        return true;
     }
 }
