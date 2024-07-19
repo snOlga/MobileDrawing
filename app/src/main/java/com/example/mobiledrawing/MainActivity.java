@@ -1,5 +1,6 @@
 package com.example.mobiledrawing;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Dialog;
 import android.graphics.Bitmap;
@@ -183,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -197,12 +199,12 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.revertStrokeButton) {
             revertStroke();
         } else if (id == R.id.hideButton) {
-            getSupportActionBar().hide();
+            findViewById(R.id.toolbar).animate().translationY(0-findViewById(R.id.toolbar).getHeight());
         }
         return true;
     }
 
     public void showToolbar(View view) {
-        getSupportActionBar().show();
+        findViewById(R.id.toolbar).animate().translationY(0);
     }
 }
