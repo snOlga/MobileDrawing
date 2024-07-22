@@ -13,6 +13,7 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -43,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
 
     int workzoneWidth = 0;
     int workzoneHeight = 0;
+
+    float showButtonX = 100;
+    float showButtonY = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +139,9 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        View showToolBarButton = findViewById(R.id.showToolBarButton);
+        showToolBarButton.setOnTouchListener(onTouchListenerShowButton);
     }
 
     public void revertStroke() {
@@ -199,12 +206,37 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.revertStrokeButton) {
             revertStroke();
         } else if (id == R.id.hideButton) {
-            findViewById(R.id.toolbar).animate().translationY(0-findViewById(R.id.toolbar).getHeight());
+            findViewById(R.id.toolbar).animate().translationY(0 - findViewById(R.id.toolbar).getHeight());
+            findViewById(R.id.showToolBarButton).setVisibility(View.VISIBLE);
         }
         return true;
     }
 
-    public void showToolbar(View view) {
-        findViewById(R.id.toolbar).animate().translationY(0);
-    }
+    View.OnClickListener onClickListenerShowButton = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            findViewById(R.id.toolbar).animate().translationY(0);
+            findViewById(R.id.showToolBarButton).setVisibility(View.GONE);
+        }
+    };
+
+    View.OnTouchListener onTouchListenerShowButton = new View.OnTouchListener() {
+        int eventBefore = MotionEvent.ACTION_UP;
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            if(motionEvent.getAction() == MotionEvent.ACTION_MOVE)
+            {
+                view.setX(motionEvent.getRawX() - (float) view.getMeasuredWidth() /2);
+                view.setY(motionEvent.getRawY() - (float) view.getMeasuredHeight() /2);
+                view.invalidate();
+                view.setOnClickListener(null);
+            }
+            else if(eventBefore != MotionEvent.ACTION_MOVE)
+            {
+                view.setOnClickListener(onClickListenerShowButton);
+            }
+            eventBefore = motionEvent.getAction();
+            return false;
+        }
+    };
 }
