@@ -53,24 +53,27 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.773" />
 
-    <ImageButton
-        android:id="@+id/showToolBarButton"
-        android:layout_width="46dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="56dp"
-        android:background="@null"
-        android:longClickable="false"
-        android:scaleType="fitXY"
-        android:src="@drawable/eye_vector"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/indigo"
         tools:ignore="MissingConstraints"
         android:id="@+id/toolbar" />
+
+    <ImageView
+        android:id="@+id/openButton"
+        android:layout_width="49dp"
+        android:layout_height="36dp"
+        app:layout_constraintStart_toStartOf="@+id/drawView"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:srcCompat="@drawable/eye_vector" />
+
+    <ImageView
+        android:id="@+id/closeButton"
+        android:layout_width="50dp"
+        android:layout_height="35dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:srcCompat="@drawable/hide_vector" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

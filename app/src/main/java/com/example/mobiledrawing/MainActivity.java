@@ -45,8 +45,7 @@ public class MainActivity extends AppCompatActivity {
     int workzoneWidth = 0;
     int workzoneHeight = 0;
 
-    float showButtonX = 100;
-    float showButtonY = 100;
+    float toolbarHeight = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,8 +139,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        View showToolBarButton = findViewById(R.id.showToolBarButton);
-        showToolBarButton.setOnTouchListener(onTouchListenerShowButton);
+        View closeToolbarButton = findViewById(R.id.closeButton);
+        closeToolbarButton.setOnTouchListener(onTouchListenerShowButton);
+        View openToolbarButton = findViewById(R.id.openButton);
+        openToolbarButton.setOnTouchListener(onTouchListenerShowButton);
+
+        findViewById(R.id.openButton).setVisibility(View.GONE);
     }
 
     public void revertStroke() {
@@ -205,9 +208,6 @@ public class MainActivity extends AppCompatActivity {
             createNewCanvas();
         } else if (id == R.id.revertStrokeButton) {
             revertStroke();
-        } else if (id == R.id.hideButton) {
-            findViewById(R.id.toolbar).animate().translationY(0 - findViewById(R.id.toolbar).getHeight());
-            findViewById(R.id.showToolBarButton).setVisibility(View.VISIBLE);
         }
         return true;
     }
@@ -215,28 +215,50 @@ public class MainActivity extends AppCompatActivity {
     View.OnClickListener onClickListenerShowButton = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            findViewById(R.id.toolbar).animate().translationY(0);
-            findViewById(R.id.showToolBarButton).setVisibility(View.GONE);
+            openToolbar(findViewById(R.id.openButton));
+        }
+    };
+
+    View.OnClickListener onClickListenerCloseButton = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            closeToolbar(findViewById(R.id.closeButton));
         }
     };
 
     View.OnTouchListener onTouchListenerShowButton = new View.OnTouchListener() {
         int eventBefore = MotionEvent.ACTION_UP;
+
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            if(motionEvent.getAction() == MotionEvent.ACTION_MOVE)
-            {
-                view.setX(motionEvent.getRawX() - (float) view.getMeasuredWidth() /2);
-                view.setY(motionEvent.getRawY() - (float) view.getMeasuredHeight() /2);
+            if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                findViewById(R.id.openButton).setX(motionEvent.getRawX() - (float) view.getMeasuredWidth() / 2);
+                findViewById(R.id.closeButton).setX(motionEvent.getRawX() - (float) view.getMeasuredWidth() / 2);
                 view.invalidate();
                 view.setOnClickListener(null);
-            }
-            else if(eventBefore != MotionEvent.ACTION_MOVE)
-            {
-                view.setOnClickListener(onClickListenerShowButton);
+            } else if (eventBefore != MotionEvent.ACTION_MOVE) {
+                findViewById(R.id.openButton).setOnClickListener(onClickListenerShowButton);
+                findViewById(R.id.closeButton).setOnClickListener(onClickListenerCloseButton);
             }
             eventBefore = motionEvent.getAction();
             return false;
         }
     };
+
+    public void openToolbar(View view) {
+        findViewById(R.id.toolbar).animate().translationY(0);
+        view.setVisibility(View.GONE);
+        findViewById(R.id.closeButton).animate().translationY(0).alpha(1);
+        view.setTranslationY(0);
+        findViewById(R.id.closeButton).setVisibility(View.VISIBLE);
+    }
+
+    public void closeToolbar(View view) {
+        float toolbarHeight = findViewById(R.id.toolbar).getHeight();
+        findViewById(R.id.toolbar).animate().translationY(0 - toolbarHeight);
+        view.setVisibility(View.GONE);
+        findViewById(R.id.openButton).animate().translationY(0 - toolbarHeight).alpha(1);
+        view.setTranslationY(0 - toolbarHeight);
+        findViewById(R.id.openButton).setVisibility(View.VISIBLE);
+    }
 }
