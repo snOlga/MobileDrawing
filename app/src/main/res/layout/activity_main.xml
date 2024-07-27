@@ -16,64 +16,55 @@
         tools:layout_editor_absoluteX="-32dp"
         tools:layout_editor_absoluteY="0dp" />
 
-    <view
-        android:id="@+id/gradient"
-        class="com.example.mobiledrawing.ColorPicker"
-        android:layout_width="153dp"
-        android:layout_height="134dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.944"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.145" />
-
-    <SeekBar
-        android:id="@+id/colorChange"
-        android:layout_width="153dp"
-        android:layout_height="16dp"
-        android:progressDrawable="@drawable/rainbow_gradient"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.937"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gradient"
-        app:layout_constraintVertical_bias="0.087"
-        android:splitTrack="false" />
-
-    <SeekBar
-        android:id="@+id/brushSize"
-        android:layout_width="340dp"
-        android:layout_height="372dp"
-        android:rotation="270"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/colorChange"
-        app:layout_constraintHorizontal_bias="0.508"
-        app:layout_constraintStart_toStartOf="@+id/colorChange"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.773" />
-
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/indigo"
-        tools:ignore="MissingConstraints"
-        android:id="@+id/toolbar" />
+        tools:ignore="MissingConstraints" />
 
     <ImageView
-        android:id="@+id/openButton"
+        android:id="@+id/openMenuButton"
         android:layout_width="49dp"
         android:layout_height="36dp"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@+id/drawView"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:srcCompat="@drawable/eye_vector" />
 
     <ImageView
-        android:id="@+id/closeButton"
+        android:id="@+id/closeMenuButton"
         android:layout_width="50dp"
         android:layout_height="35dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:srcCompat="@drawable/hide_vector" />
+
+    <include
+        android:id="@+id/colorPickerTab"
+        layout="@layout/color_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/openColorPickerButton"
+        android:layout_width="49dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="300dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/drawView"
+        app:srcCompat="@drawable/eye_vector" />
+
+    <ImageView
+        android:id="@+id/closeColorPickerButton"
+        android:layout_width="50dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="300dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/hide_vector" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

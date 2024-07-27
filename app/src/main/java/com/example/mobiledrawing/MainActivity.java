@@ -1,22 +1,16 @@
 package com.example.mobiledrawing;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -32,7 +26,6 @@ import androidx.core.view.WindowInsetsCompat;
 import android.view.ViewGroup.LayoutParams;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
 
     int workzoneWidth = 0;
     int workzoneHeight = 0;
-
-    float toolbarHeight = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,12 +130,15 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        View closeToolbarButton = findViewById(R.id.closeButton);
-        closeToolbarButton.setOnTouchListener(onTouchListenerShowButton);
-        View openToolbarButton = findViewById(R.id.openButton);
-        openToolbarButton.setOnTouchListener(onTouchListenerShowButton);
+        View closeToolbarButton = findViewById(R.id.closeMenuButton);
+        closeToolbarButton.setOnTouchListener(onTouchListenerMenuButton);
+        View openToolbarButton = findViewById(R.id.openMenuButton);
+        openToolbarButton.setOnTouchListener(onTouchListenerMenuButton);
 
-        findViewById(R.id.openButton).setVisibility(View.GONE);
+        View closeColorPickerButton = findViewById(R.id.closeColorPickerButton);
+        closeColorPickerButton.setOnTouchListener(onTouchListenerColorPickerButton);
+        View openColorPickerButton = findViewById(R.id.openColorPickerButton);
+        openColorPickerButton.setOnTouchListener(onTouchListenerColorPickerButton);
     }
 
     public void revertStroke() {
@@ -215,50 +209,93 @@ public class MainActivity extends AppCompatActivity {
     View.OnClickListener onClickListenerShowButton = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            openToolbar(findViewById(R.id.openButton));
+            if (view.getId() == R.id.openMenuButton)
+                openToolbar();
+            else if (view.getId() == R.id.openColorPickerButton)
+                openColorPicker();
+
         }
     };
 
     View.OnClickListener onClickListenerCloseButton = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            closeToolbar(findViewById(R.id.closeButton));
+            if (view.getId() == R.id.closeMenuButton)
+                closeToolbar();
+            else if (view.getId() == R.id.closeColorPickerButton)
+                closeColorPicker();
         }
     };
 
-    View.OnTouchListener onTouchListenerShowButton = new View.OnTouchListener() {
+    View.OnTouchListener onTouchListenerMenuButton = new View.OnTouchListener() {
         int eventBefore = MotionEvent.ACTION_UP;
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-                findViewById(R.id.openButton).setX(motionEvent.getRawX() - (float) view.getMeasuredWidth() / 2);
-                findViewById(R.id.closeButton).setX(motionEvent.getRawX() - (float) view.getMeasuredWidth() / 2);
+                findViewById(R.id.openMenuButton).setX(motionEvent.getRawX() - (float) view.getMeasuredWidth() / 2);
+                findViewById(R.id.closeMenuButton).setX(motionEvent.getRawX() - (float) view.getMeasuredWidth() / 2);
                 view.invalidate();
                 view.setOnClickListener(null);
             } else if (eventBefore != MotionEvent.ACTION_MOVE) {
-                findViewById(R.id.openButton).setOnClickListener(onClickListenerShowButton);
-                findViewById(R.id.closeButton).setOnClickListener(onClickListenerCloseButton);
+                findViewById(R.id.openMenuButton).setOnClickListener(onClickListenerShowButton);
+                findViewById(R.id.closeMenuButton).setOnClickListener(onClickListenerCloseButton);
             }
             eventBefore = motionEvent.getAction();
             return false;
         }
     };
 
-    public void openToolbar(View view) {
+    View.OnTouchListener onTouchListenerColorPickerButton = new View.OnTouchListener() {
+        int eventBefore = MotionEvent.ACTION_UP;
+
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                findViewById(R.id.openColorPickerButton).setY(motionEvent.getRawY() - (float) view.getMeasuredHeight() / 2);
+                findViewById(R.id.closeColorPickerButton).setY(motionEvent.getRawY() - (float) view.getMeasuredHeight() / 2);
+                view.invalidate();
+                view.setOnClickListener(null);
+            } else if (eventBefore != MotionEvent.ACTION_MOVE) {
+                findViewById(R.id.openColorPickerButton).setOnClickListener(onClickListenerShowButton);
+                findViewById(R.id.closeColorPickerButton).setOnClickListener(onClickListenerCloseButton);
+            }
+            eventBefore = motionEvent.getAction();
+            return false;
+        }
+    };
+
+    public void openToolbar() {
         findViewById(R.id.toolbar).animate().translationY(0);
-        view.setVisibility(View.GONE);
-        findViewById(R.id.closeButton).animate().translationY(0).alpha(1);
-        view.setTranslationY(0);
-        findViewById(R.id.closeButton).setVisibility(View.VISIBLE);
+        findViewById(R.id.openMenuButton).setVisibility(View.GONE);
+        findViewById(R.id.closeMenuButton).animate().translationY(0);
+        findViewById(R.id.openMenuButton).setTranslationY(0);
+        findViewById(R.id.closeMenuButton).setVisibility(View.VISIBLE);
     }
 
-    public void closeToolbar(View view) {
+    public void closeToolbar() {
         float toolbarHeight = findViewById(R.id.toolbar).getHeight();
         findViewById(R.id.toolbar).animate().translationY(0 - toolbarHeight);
-        view.setVisibility(View.GONE);
-        findViewById(R.id.openButton).animate().translationY(0 - toolbarHeight).alpha(1);
-        view.setTranslationY(0 - toolbarHeight);
-        findViewById(R.id.openButton).setVisibility(View.VISIBLE);
+        findViewById(R.id.closeMenuButton).setVisibility(View.GONE);
+        findViewById(R.id.openMenuButton).animate().translationY(0 - toolbarHeight);
+        findViewById(R.id.closeMenuButton).setTranslationY(0 - toolbarHeight);
+        findViewById(R.id.openMenuButton).setVisibility(View.VISIBLE);
+    }
+
+    public void openColorPicker() {
+        findViewById(R.id.colorPickerTab).animate().translationX(0);
+        findViewById(R.id.openColorPickerButton).setVisibility(View.GONE);
+        findViewById(R.id.closeColorPickerButton).animate().translationX(0);
+        findViewById(R.id.openColorPickerButton).setTranslationX(0);
+        findViewById(R.id.closeColorPickerButton).setVisibility(View.VISIBLE);
+    }
+
+    public void closeColorPicker() {
+        float colorPickerWidth = findViewById(R.id.colorPickerTab).getWidth();
+        findViewById(R.id.colorPickerTab).animate().translationX(0 - colorPickerWidth);
+        findViewById(R.id.closeColorPickerButton).setVisibility(View.GONE);
+        findViewById(R.id.openColorPickerButton).animate().translationX(0 - colorPickerWidth);
+        findViewById(R.id.closeColorPickerButton).setTranslationX(0 - colorPickerWidth);
+        findViewById(R.id.openColorPickerButton).setVisibility(View.VISIBLE);
     }
 }
