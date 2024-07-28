@@ -130,15 +130,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        View closeToolbarButton = findViewById(R.id.closeMenuButton);
-        closeToolbarButton.setOnTouchListener(onTouchListenerMenuButton);
-        View openToolbarButton = findViewById(R.id.openMenuButton);
-        openToolbarButton.setOnTouchListener(onTouchListenerMenuButton);
+        findViewById(R.id.closeMenuButton).setOnTouchListener(onTouchListenerMenuButton);
+        findViewById(R.id.openMenuButton).setOnTouchListener(onTouchListenerMenuButton);
 
-        View closeColorPickerButton = findViewById(R.id.closeColorPickerButton);
-        closeColorPickerButton.setOnTouchListener(onTouchListenerColorPickerButton);
-        View openColorPickerButton = findViewById(R.id.openColorPickerButton);
-        openColorPickerButton.setOnTouchListener(onTouchListenerColorPickerButton);
+        findViewById(R.id.closeColorPickerButton).setOnTouchListener(onTouchListenerColorPickerButton);
+        findViewById(R.id.openColorPickerButton).setOnTouchListener(onTouchListenerColorPickerButton);
     }
 
     public void revertStroke() {
@@ -232,14 +228,20 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
+            float xCoord = motionEvent.getRawX();
+
+            View openButton = findViewById(R.id.openMenuButton);
+            View closeButton = findViewById(R.id.closeMenuButton);
+
             if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-                findViewById(R.id.openMenuButton).setX(motionEvent.getRawX() - (float) view.getMeasuredWidth() / 2);
-                findViewById(R.id.closeMenuButton).setX(motionEvent.getRawX() - (float) view.getMeasuredWidth() / 2);
+                openButton.setX(xCoord - (float) view.getMeasuredWidth() / 2);
+                closeButton.setX(xCoord - (float) view.getMeasuredWidth() / 2);
+
                 view.invalidate();
                 view.setOnClickListener(null);
             } else if (eventBefore != MotionEvent.ACTION_MOVE) {
-                findViewById(R.id.openMenuButton).setOnClickListener(onClickListenerShowButton);
-                findViewById(R.id.closeMenuButton).setOnClickListener(onClickListenerCloseButton);
+                openButton.setOnClickListener(onClickListenerShowButton);
+                closeButton.setOnClickListener(onClickListenerCloseButton);
             }
             eventBefore = motionEvent.getAction();
             return false;
@@ -251,14 +253,20 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
+            float yCoord = motionEvent.getRawY();
+
+            View openButton = findViewById(R.id.openColorPickerButton);
+            View closeButton = findViewById(R.id.closeColorPickerButton);
+
             if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-                findViewById(R.id.openColorPickerButton).setY(motionEvent.getRawY() - (float) view.getMeasuredHeight() / 2);
-                findViewById(R.id.closeColorPickerButton).setY(motionEvent.getRawY() - (float) view.getMeasuredHeight() / 2);
+                openButton.setY(yCoord - (float) view.getMeasuredHeight() / 2);
+                closeButton.setY(yCoord - (float) view.getMeasuredHeight() / 2);
+
                 view.invalidate();
                 view.setOnClickListener(null);
             } else if (eventBefore != MotionEvent.ACTION_MOVE) {
-                findViewById(R.id.openColorPickerButton).setOnClickListener(onClickListenerShowButton);
-                findViewById(R.id.closeColorPickerButton).setOnClickListener(onClickListenerCloseButton);
+                openButton.setOnClickListener(onClickListenerShowButton);
+                closeButton.setOnClickListener(onClickListenerCloseButton);
             }
             eventBefore = motionEvent.getAction();
             return false;
@@ -267,35 +275,51 @@ public class MainActivity extends AppCompatActivity {
 
     public void openToolbar() {
         findViewById(R.id.toolbar).animate().translationY(0);
-        findViewById(R.id.openMenuButton).setVisibility(View.GONE);
-        findViewById(R.id.closeMenuButton).animate().translationY(0);
-        findViewById(R.id.openMenuButton).setTranslationY(0);
-        findViewById(R.id.closeMenuButton).setVisibility(View.VISIBLE);
+
+        View openButton = findViewById(R.id.openMenuButton);
+        View closeButton = findViewById(R.id.closeMenuButton);
+
+        openButton.setVisibility(View.GONE);
+        openButton.setTranslationY(0);
+        closeButton.setVisibility(View.VISIBLE);
+        closeButton.animate().translationY(0);
     }
 
     public void closeToolbar() {
         float toolbarHeight = findViewById(R.id.toolbar).getHeight();
         findViewById(R.id.toolbar).animate().translationY(0 - toolbarHeight);
-        findViewById(R.id.closeMenuButton).setVisibility(View.GONE);
-        findViewById(R.id.openMenuButton).animate().translationY(0 - toolbarHeight);
-        findViewById(R.id.closeMenuButton).setTranslationY(0 - toolbarHeight);
-        findViewById(R.id.openMenuButton).setVisibility(View.VISIBLE);
+
+        View openButton = findViewById(R.id.openMenuButton);
+        View closeButton = findViewById(R.id.closeMenuButton);
+
+        closeButton.setVisibility(View.GONE);
+        closeButton.setTranslationY(0 - toolbarHeight);
+        openButton.setVisibility(View.VISIBLE);
+        openButton.animate().translationY(0 - toolbarHeight);
     }
 
     public void openColorPicker() {
         findViewById(R.id.colorPickerTab).animate().translationX(0);
-        findViewById(R.id.openColorPickerButton).setVisibility(View.GONE);
-        findViewById(R.id.closeColorPickerButton).animate().translationX(0);
-        findViewById(R.id.openColorPickerButton).setTranslationX(0);
-        findViewById(R.id.closeColorPickerButton).setVisibility(View.VISIBLE);
+
+        View openButton = findViewById(R.id.openColorPickerButton);
+        View closeButton = findViewById(R.id.closeColorPickerButton);
+
+        openButton.setVisibility(View.GONE);
+        openButton.setTranslationX(0);
+        closeButton.setVisibility(View.VISIBLE);
+        closeButton.animate().translationX(0);
     }
 
     public void closeColorPicker() {
         float colorPickerWidth = findViewById(R.id.colorPickerTab).getWidth();
         findViewById(R.id.colorPickerTab).animate().translationX(0 - colorPickerWidth);
-        findViewById(R.id.closeColorPickerButton).setVisibility(View.GONE);
-        findViewById(R.id.openColorPickerButton).animate().translationX(0 - colorPickerWidth);
-        findViewById(R.id.closeColorPickerButton).setTranslationX(0 - colorPickerWidth);
-        findViewById(R.id.openColorPickerButton).setVisibility(View.VISIBLE);
+
+        View openButton = findViewById(R.id.openColorPickerButton);
+        View closeButton = findViewById(R.id.closeColorPickerButton);
+
+        closeButton.setVisibility(View.GONE);
+        closeButton.setTranslationX(0 - colorPickerWidth);
+        openButton.setVisibility(View.VISIBLE);
+        openButton.animate().translationX(0 - colorPickerWidth);
     }
 }
